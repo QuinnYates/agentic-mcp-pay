@@ -8,6 +8,8 @@ import { PricingTable } from "./pricing.js";
 import { PaymentGate } from "./gate.js";
 import { MockProtocol } from "./protocols/mock.js";
 import { X402Protocol } from "./protocols/x402.js";
+import { MppProtocol } from "./protocols/mpp.js";
+import { StripeProtocol } from "./protocols/stripe-protocol.js";
 import type { PaymentProtocol } from "./protocols/interface.js";
 import { createDashboardServer } from "./dashboard/server.js";
 import { generateDashboardToken } from "./dashboard/auth.js";
@@ -50,6 +52,15 @@ export function withPayments(
         network: "base",
         token: "USDC",
       }));
+    } else if (proto === "mpp") {
+      protocols.push(new MppProtocol({
+        apiUrl: config.mppApiUrl ?? "https://mpp.dev/api/verify",
+        network: "tempo",
+      }));
+    } else if (proto === "stripe") {
+      const secretKey = config.stripeSecretKey ?? process.env.MCP_PAY_STRIPE_SECRET;
+      if (!secretKey) throw new Error("Stripe protocol requires stripeSecretKey in config or MCP_PAY_STRIPE_SECRET env var");
+      protocols.push(new StripeProtocol({ secretKey }));
     }
   }
 

@@ -19,6 +19,8 @@ export interface McpPayConfig {
   dbPath?: string;
   challengeTtlMs?: number;
   facilitatorUrl?: string;
+  mppApiUrl?: string;
+  stripeSecretKey?: string;
 }
 
 // --- Payment types ---
