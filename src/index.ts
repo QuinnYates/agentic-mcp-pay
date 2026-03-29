@@ -7,6 +7,7 @@ import { cleanupExpiredChallenges } from "./storage/challenges.js";
 import { PricingTable } from "./pricing.js";
 import { PaymentGate } from "./gate.js";
 import { MockProtocol } from "./protocols/mock.js";
+import { X402Protocol } from "./protocols/x402.js";
 import type { PaymentProtocol } from "./protocols/interface.js";
 
 export type { McpPayConfig } from "./types.js";
@@ -40,8 +41,13 @@ export function withPayments(
   for (const proto of config.protocols) {
     if (proto === "mock") {
       protocols.push(new MockProtocol({ shouldVerify: true }));
+    } else if (proto === "x402") {
+      protocols.push(new X402Protocol({
+        facilitatorUrl: config.facilitatorUrl ?? "https://x402.org/facilitator",
+        network: "base",
+        token: "USDC",
+      }));
     }
-    // "x402" will be added in Task 11
   }
 
   // 5. Create PaymentGate
