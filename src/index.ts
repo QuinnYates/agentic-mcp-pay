@@ -9,6 +9,8 @@ import { PaymentGate } from "./gate.js";
 import { MockProtocol } from "./protocols/mock.js";
 import { X402Protocol } from "./protocols/x402.js";
 import type { PaymentProtocol } from "./protocols/interface.js";
+import { createDashboardServer } from "./dashboard/server.js";
+import { generateDashboardToken } from "./dashboard/auth.js";
 
 export type { McpPayConfig } from "./types.js";
 export { ErrorCode, toCents, fromCents } from "./types.js";
@@ -20,6 +22,7 @@ const CLEANUP_INTERVAL_MS = 60_000; // 1 minute
 export interface WithPaymentsResult {
   server: McpServer;
   cleanup: () => void;
+  dashboardUrl?: string;
 }
 
 export function withPayments(
@@ -30,7 +33,7 @@ export function withPayments(
   validatePayTo(config.payTo);
 
   // 2. Create SQLite database
-  const dbPath = (config as McpPayConfig & { dbPath?: string }).dbPath ?? ":memory:";
+  const dbPath = config.dbPath ?? ":memory:";
   const db = createDatabase(dbPath);
 
   // 3. Build PricingTable from config
@@ -174,10 +177,27 @@ export function withPayments(
     requestHandlers.set(method, wrappedHandler);
   }
 
+  // 8. Start dashboard if configured
+  let dashboardUrl: string | undefined;
+  let dashboardServer: ReturnType<typeof import("http").createServer> | undefined;
+
+  if (config.dashboard) {
+    const token = generateDashboardToken();
+    const dashApp = createDashboardServer(db, token);
+    const port = config.dashboard.port;
+    dashboardServer = dashApp.listen(port, "127.0.0.1", () => {
+      const addr = dashboardServer!.address() as { port: number };
+      dashboardUrl = `http://127.0.0.1:${addr.port}/?token=${token}`;
+    });
+  }
+
   function cleanup() {
     clearInterval(cleanupTimer);
+    if (dashboardServer) {
+      dashboardServer.close();
+    }
     db.close();
   }
 
-  return { server: mcpServer, cleanup };
+  return { server: mcpServer, cleanup, get dashboardUrl() { return dashboardUrl; } };
 }

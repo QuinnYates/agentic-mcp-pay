@@ -16,6 +16,7 @@ export interface McpPayConfig {
   payTo: string;
   protocols: string[];
   dashboard?: { port: number };
+  dbPath?: string;
   challengeTtlMs?: number;
   facilitatorUrl?: string;
 }
