@@ -98,11 +98,11 @@ describe("withPayments integration", () => {
     expect(content).toHaveLength(1);
 
     const parsed = JSON.parse(content[0].text);
-    expect(parsed.error).toBe(ErrorCode.PAYMENT_REQUIRED);
-    expect(parsed.challenge).toBeTruthy();
-    expect(parsed.challenge.nonce).toBeTruthy();
-    expect(parsed.challenge.amount).toBe(50); // 0.50 USD = 50 cents
-    expect(parsed.challenge.protocol).toBe("mock");
+    expect(parsed.code).toBe(ErrorCode.PAYMENT_REQUIRED);
+    expect(parsed.data).toBeTruthy();
+    expect(parsed.data.nonce).toBeTruthy();
+    expect(parsed.data.amount).toBe(50); // 0.50 USD = 50 cents
+    expect(parsed.data.protocol).toBe("mock");
   });
 
   it("passes through free tools without payment check", async () => {
@@ -137,7 +137,7 @@ describe("withPayments integration", () => {
     expect(challengeResult.isError).toBe(true);
     const challengeContent = challengeResult.content as Array<{ type: string; text: string }>;
     const challengeData = JSON.parse(challengeContent[0].text);
-    const nonce = challengeData.challenge.nonce;
+    const nonce = challengeData.data.nonce;
 
     // Step 2: Call with payment proof
     const paidResult = await client.callTool({
