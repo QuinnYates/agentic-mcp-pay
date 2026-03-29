@@ -20,7 +20,8 @@
     "@modelcontextprotocol/sdk": "^1.28.0",
     "@noble/hashes": "^2.0.1",
     "better-sqlite3": "^12.8.0",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "stripe": "^21.0.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
