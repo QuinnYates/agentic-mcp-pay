@@ -13,9 +13,10 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["mcp", "payments", "x402", "mpp", "stripe", "agentic", "ai-agents"],
+  "author": "Quinn Ye",
   "license": "MIT",
+  "engines": { "node": ">=18" },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.28.0",
     "@noble/hashes": "^2.0.1",
