@@ -1,5 +1,9 @@
 # agentic-mcp-pay
 
+[![npm](https://img.shields.io/npm/v/agentic-mcp-pay)](https://npmjs.com/package/agentic-mcp-pay)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Tests](https://img.shields.io/badge/tests-72%20passing-brightgreen)
+
 **Payment gateway for MCP servers — monetize your tools with one wrapper**
 
 Wrap any [Model Context Protocol](https://modelcontextprotocol.io) server with payment enforcement. Agents call your tools normally; the gateway intercepts, issues a payment challenge, verifies the proof, then executes. One function. No protocol lock-in.
@@ -129,3 +133,11 @@ All options for `McpPayConfig`:
 ## License
 
 MIT
+
+---
+
+## See Also
+
+- [agentic-mcp-pay-client](https://github.com/QuinnYates/agentic-mcp-pay-client) — buyer SDK: transparent auto-pay, budget controls, multi-protocol
+- [agentic-mcp-pay-demo](https://github.com/QuinnYates/agentic-mcp-pay-demo) — full end-to-end demo of the payment loop
+- [Tutorial: Monetise your MCP tool in 5 minutes](https://gist.github.com/QuinnYates/agentic-mcp-pay-tutorial)
