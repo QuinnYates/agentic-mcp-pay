@@ -121,14 +121,14 @@ export function withPayments(
           return originalHandler(request, extra);
 
         case "payment_required":
-          // Return challenge as error content
+          // Return challenge as error content (format: { code, data } expected by client parser)
           return {
             content: [
               {
                 type: "text",
                 text: JSON.stringify({
-                  error: gateResult.errorCode,
-                  challenge: gateResult.challenge,
+                  code: gateResult.errorCode,
+                  data: gateResult.challenge,
                 }),
               },
             ],
