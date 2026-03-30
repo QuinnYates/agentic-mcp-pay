@@ -3,3 +3,5 @@ dist/
 *.db
 .env
 CLAUDE.md
+docs/superpowers/
+docs/community-posts.md
